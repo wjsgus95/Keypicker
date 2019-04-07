@@ -1,9 +1,11 @@
-{"depth":1,"gas":"0xffffffffffffffff","gasCost":"0x3","memory":"0x","op":127,"opName":"PUSH32","pc":0,"stack":[],"storage":{}}
-{"depth":1,"gas":"0xfffffffffffffffc","gasCost":"0x3","memory":"0x","op":127,"opName":"PUSH32","pc":33,"stack":["0x1010"],"storage":{}}
-{"depth":1,"gas":"0xfffffffffffffff9","gasCost":"0x32","memory":"0x","op":84,"opName":"SLOAD","pc":66,"stack":["0x1010","0x1"],"storage":{}}
-{"depth":1,"gas":"0xffffffffffffffc7","gasCost":"0x3","memory":"0x","op":127,"opName":"PUSH32","pc":67,"stack":["0x1010","0x0"],"storage":{}}
-{"depth":1,"gas":"0xffffffffffffffc4","gasCost":"0x3","memory":"0x","op":127,"opName":"PUSH32","pc":100,"stack":["0x1010","0x0","0x1010"],"storage":{}}
-{"depth":1,"gas":"0xffffffffffffffc1","gasCost":"0x4e20","memory":"0x","op":85,"opName":"SSTORE","pc":133,"stack":["0x1010","0x0","0x1010","0x1"],"storage":{}}
-{"depth":1,"gas":"0xffffffffffffb1a1","gasCost":"0x2","memory":"0x","op":88,"opName":"PC","pc":134,"stack":["0x1010","0x0"],"storage":{"0x0000000000000000000000000000000000000000000000000000000000000001":"0x0000000000000000000000000000000000000000000000000000000000001010"}}
-{"depth":1,"gas":"0xffffffffffffb19f","gasCost":"0x2","memory":"0x","op":88,"opName":"PC","pc":135,"stack":["0x1010","0x0","0x86"],"storage":{"0x0000000000000000000000000000000000000000000000000000000000000001":"0x0000000000000000000000000000000000000000000000000000000000001010"}}
-{"gasUsed":"0x4e62","output":"0x","time":1928}
+{
+    "op1":{"depth":1,"gas":"0xffffffffffffffff","gasCost":"0x3","memory":"0x","op":127,"opName":"PUSH32","pc":0,"stack":[],"storage":{}},
+    "op2":{"depth":1,"gas":"0xfffffffffffffffc","gasCost":"0x3","memory":"0x","op":127,"opName":"PUSH32","pc":33,"stack":["0x1010"],"storage":{}},
+    "op3":{"depth":1,"gas":"0xfffffffffffffff9","gasCost":"0x32","memory":"0x","op":84,"opName":"SLOAD","pc":66,"stack":["0x1010","0x1"],"storage":{}},
+    "op4":{"depth":1,"gas":"0xffffffffffffffc7","gasCost":"0x3","memory":"0x","op":127,"opName":"PUSH32","pc":67,"stack":["0x1010","0x0"],"storage":{}},
+    "op5":{"depth":1,"gas":"0xffffffffffffffc4","gasCost":"0x3","memory":"0x","op":127,"opName":"PUSH32","pc":100,"stack":["0x1010","0x0","0x1010"],"storage":{}},
+    "op6":{"depth":1,"gas":"0xffffffffffffffc1","gasCost":"0x4e20","memory":"0x","op":85,"opName":"SSTORE","pc":133,"stack":["0x1010","0x0","0x1010","0x1"],"storage":{}},
+    "op7":{"depth":1,"gas":"0xffffffffffffb1a1","gasCost":"0x2","memory":"0x","op":88,"opName":"PC","pc":134,"stack":["0x1010","0x0"],"storage":{"0x0000000000000000000000000000000000000000000000000000000000000001":"0x0000000000000000000000000000000000000000000000000000000000001010"}},
+    "op8":{"depth":1,"gas":"0xffffffffffffb19f","gasCost":"0x2","memory":"0x","op":88,"opName":"PC","pc":135,"stack":["0x1010","0x0","0x86"],"storage":{"0x0000000000000000000000000000000000000000000000000000000000000001":"0x0000000000000000000000000000000000000000000000000000000000001010"}},
+    "op9":{"gasUsed":"0x4e62","output":"0x","time":1928}
+}
