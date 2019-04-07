@@ -1,10 +1,30 @@
 import json
 import math
+import sys
+import argparse
+
+# Default output file path.
+output_file_path='result.stats'
+
+# Argparse initialized.
+parser = argparse.ArgumentParser(description = \
+        "Keypicker, transaction replay from EVM execution trace")
+# Input file path positional(required) argument.
+parser.add_argument('input_trace', type=str, help='Input JSON trace file')
+# Output file path optional.
+parser.add_argument('--dest', type=str, help=f'Output stats file path, defaults to {output_file_path}',
+                    nargs=1, default=output_file_path)
+args = parser.parse_args()
+
+# Override output file path if any given.
+output_file_path = args.dest
 
 maximum=pow(2, 256)
 
-with open('state.json') as json_file:
-    json_data=json.load(json.file)
+#with open('state.json') as json_file:
+#    json_data=json.load(json.file)
+with open(args.input_trace) as json_file:
+    json_data=json.load(json_file)
 
 bytecode=str(json_data["bytecode"])
 stack_data=json_data["stack"]
@@ -28,67 +48,67 @@ while i<l:
         print("}\n")
         break
 
-    else if op=="01":
+    elif op=="01":
         stack[0]=(stack[0]+stack[1])%maximum
         print("0x01 ADD")
 
-    else if op=="02":
+    elif op=="02":
         stack[0]=(stack[0]*stack[1])%maximum
         print("0x02 MUL")
 
-    else if op=="03":
+    elif op=="03":
         stack[0]=(stack[0]-stack[1])%maximum
         print("0x03 SUB")
 
-    else if op=="04":
+    elif op=="04":
         if stack[1]==0:
             stack[0]=0
         else:
             stack[0]=(math.floor(stack[0]/stack[1]))%maximum
         print("0x04 DIV")
 
-    else if op=="05":
+    elif op=="05":
         if stack[1]==0:
             stack[0]=0
-        else if stack[0]==-maximum/2 and stack[1]==-1:
+        elif stack[0]==-maximum/2 and stack[1]==-1:
             stack[0]=-maximum/2
         else:
             stack[0]=abs((math.floor(stack[0]/stack[1])))%maximum
         print("0x05 SDIV")
 
-    else if op=="06":
+    elif op=="06":
         if stack[1]==0:
             stack[0]=0
         else:
             stack[0]=stack[0]%stack[1]
         print("0x06 MOD")
 
-    else if op=="07":
+    elif op=="07":
         if stack[1]==0:
             stack[0]=0
         else:
             stack[0]=abs(stack[0]%stack[1])
         print("0x07 SMOD")
 
-    else if op=="08":
+    elif op=="08":
         if stack[2]==0:
             stack[0]=0
         else:
             stack[0]=(stack[0]+stack[1])%stack[2]
         print("0x08 ADDMOD")
 
-    else if op=="09":
+    elif op=="09":
         if stack[2]==0:
             stack[0]=0
         else:
             stack[0]=(stack[0]*stack[1])%stack[2]
         print("0x09 MULMOD")
 
-    else if op=="0a":
+    elif op=="0a":
         stack[0]=pow(stack[0], stack[1])%maximum
         print("0x0a EXP")
 
-    else if op=="0b":
+    elif op=="0b":
         x=0b0
             
         
