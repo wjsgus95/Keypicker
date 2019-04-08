@@ -5,9 +5,6 @@ import math
 import sys
 import argparse
 
-# Default output file path.
-output_file_path='result.stats'
-
 # Argparse initialized.
 parser = argparse.ArgumentParser(description = \
         "Keypicker, transaction replay from EVM execution trace")
@@ -15,20 +12,24 @@ parser = argparse.ArgumentParser(description = \
 parser.add_argument('input_trace', type=str, help='Input JSON trace file')
 # Output file path optional.
 parser.add_argument('--dest', type=str, help=f'Output stats file path, defaults to {output_file_path}',
-                    nargs=1, default=output_file_path)
+                    nargs=1, default=DEFAULT_OUT_PATH)
 args = parser.parse_args()
 
-# Override output file path if any given.
-output_file_path = args.dest
+# Will override output file path if any given.
+outfile_path = args.dest
 
 
 class Keypicker():
-    def __init__(self, m_bytecode=""):
-        bytecode = m_bytecode
+    def __init__(self):
         pass
 
-    def init(json):
-        pass
+    def init(json_path):
+        with open(json_path) as json_file:
+            self.json_data = json.load(json_file)
+        self.bytecode=str(json_data["bytecode"])
+        self.stack_data=json_data["stack"]
+        self.memory_data=json_data["memory"]
+        self.storage_data=json_data["storage"]
 
     def run():
         pass
