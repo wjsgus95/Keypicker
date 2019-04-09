@@ -6,6 +6,7 @@ import math
 import sys
 import argparse
 
+
 # Argparse initialized.
 parser = argparse.ArgumentParser(description = \
         "Keypicker, transaction replay from EVM execution trace")
@@ -21,13 +22,11 @@ outfile_path = args.dest
 
 
 class Keypicker():
-    def __init__(self):
-        pass
-
     # Initialize with given json file path.
-    def init(json_path):
+    def __init__(self, json_path):
         with open(json_path) as json_file:
             self.json_data = json.load(json_file)
+
         self.bytecode=str(json_data["bytecode"])
         self.stack_data=json_data["stack"]
         self.memory_data=json_data["memory"]
@@ -37,17 +36,17 @@ class Keypicker():
         self.memory = 0x00
         self.storage = dict()
 
+        self.parser = Parser(self.bytecode)
         self.engine = Engine()
 
     def run():
-        while len(self.bytecode):
-            op, bytecode = bytecode[0:2], bytecode[2:]
-            self.engine.run_single_op(op)
+        op_queue = self.parser.parse_ops()
+        while len(op_queue):
+            op, operand = op_queue.pop()
+            self.engine.run_single_op(op, operand)
 
 
 if __name__ == "__main__":
-    #keypicker = Keypicker(...)
-    #keypicker.init(...)
-    #keypicker.run()
-    pass
+    keypicker = Keypicker(args.input_trace)
+    keypicker.run()
 
