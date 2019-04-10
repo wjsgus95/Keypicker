@@ -1,5 +1,6 @@
 from constants import *
-import Engine
+from Engine import Engine
+from Parser import Parser
 
 import json
 import math
@@ -27,16 +28,7 @@ class Keypicker():
         with open(json_path) as json_file:
             self.json_data = json.load(json_file)
 
-        #self.bytecode=str(json_data["bytecode"])
-        #self.stack_data=json_data["stack"]
-        #self.memory_data=json_data["memory"]
-        #self.storage_data=json_data["storage"]
-
-        #self.stack = list()
-        #self.memory = 0x00
-        #self.storage = dict()
-
-        self.parser = Parser(self.bytecode)
+        self.parser = Parser(self.json_data["bytecode"])
         self.engine = Engine(self.json_data)
 
     def run(self) -> None:

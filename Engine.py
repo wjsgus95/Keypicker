@@ -23,10 +23,10 @@ class Engine():
         #self.op_dict[STOP] = lambda operand: self.op_queue.clear()
 
         ## Confiure arithmetic operations.
-        #self.op_dict[ADD] = lambda operand: stack[0]=(stack[0]+stack[1])%maximum
-        #self.op_dict[MUL] = lambda operand: stack[0]=(stack[0]*stack[1])%maximum
-        #self.op_dict[SUB] = lambda operand: stack[0]=(stack[0]-stack[1])%maximum
-        #self.op_dict[DIV] = lambda operand: stack[0] = 0 if stack[1] == 0 else stack[0]=(math.floor(stack[0]/stack[1]))%maximum)
+        #self.op_dict[ADD] = lambda operand: stack[0]=(stack[0]+stack[1])%UINT_256_CEILING
+        #self.op_dict[MUL] = lambda operand: stack[0]=(stack[0]*stack[1])%UINT_256_CEILING
+        #self.op_dict[SUB] = lambda operand: stack[0]=(stack[0]-stack[1])%UINT_256_CEILING
+        #self.op_dict[DIV] = lambda operand: stack[0] = 0 if stack[1] == 0 else stack[0]=(math.floor(stack[0]/stack[1]))%UINT_256_CEILING)
         #self.op_dict[SDIV] = lambda operand: 
         #self.op_dict[MOD] = lambda operand: 
         #self.op_dict[SMOD] = lambda operand: 
@@ -54,81 +54,81 @@ class Engine():
         ## Configure PUSH operations.
         #for PUSH in range(PUSH1, PUSH32+1):
         #    self.op_dict[PUSH] = lambda operand: self.stack.insert(0, operand)
+        pass
 
     def run_ops(self, op_queue) -> None:
         self.op_queue = op_queue
         while len(self.op_queue):
-            op, operand = op_queue.pop()
+            op, operand = op_queue.pop(0)
             self.run_single_op(op, operand)
 
     def run_single_op(self, op, operand) -> None:
         #self.op_dict[op](operand)
         if op==STOP:
             print("0x00 STOP")
-            print("\tStack: ", stack)
-            print("\tMemory: ", memory)
-            print("\tStorage: ", storage)
+            print("\tStack: ", self.stack)
+            print("\tMemory: ", self.memory)
+            print("\tStorage: ", self.storage)
             print("}\n")
-            break
 
         elif op==ADD:
-            stack[0]=(stack[0]+stack[1])%maximum
+            self.stack[0]=(self.stack[0]+self.stack[1])%UINT_256_CEILING
             print("0x01 ADD")
 
         elif op==MUL:
-            stack[0]=(stack[0]*stack[1])%maximum
+            self.stack[0]=(self.stack[0]*self.stack[1])%UINT_256_CEILING
             print("0x02 MUL")
 
         elif op==SUB:
-            stack[0]=(stack[0]-stack[1])%maximum
+            self.stack[0]=(self.stack[0]-self.stack[1])%UINT_256_CEILING
             print("0x03 SUB")
 
         elif op==DIV:
-            if stack[1]==0:
-                stack[0]=0
+            if self.stack[1]==0:
+                self.stack[0]=0
             else:
-                stack[0]=(math.floor(stack[0]/stack[1]))%maximum
+                self.stack[0]=(math.floor(self.stack[0]/self.stack[1]))%UINT_256_CEILING
             print("0x04 DIV")
 
         elif op==SDIV:
-            if stack[1]==0:
-                stack[0]=0
-            elif stack[0]==-maximum/2 and stack[1]==-1:
-                stack[0]=-maximum/2
+            if self.stack[1]==0:
+                self.stack[0]=0
+            elif self.stack[0]==-UINT_256_CEILING/2 and self.stack[1]==-1:
+                self.stack[0]=-UINT_256_CEILING/2
             else:
-                stack[0]=abs((math.floor(stack[0]/stack[1])))%maximum
+                self.stack[0]=abs((math.floor(self.stack[0]/self.stack[1])))%UINT_256_CEILING
             print("0x05 SDIV")
 
         elif op==MOD:
-            if stack[1]==0:
-                stack[0]=0
+            if self.stack[1]==0:
+                self.stack[0]=0
             else:
-                stack[0]=stack[0]%stack[1]
+                self.stack[0]=self.stack[0]%self.stack[1]
             print("0x06 MOD")
 
         elif op==SMOD:
-            if stack[1]==0:
-                stack[0]=0
+            if self.stack[1]==0:
+                self.stack[0]=0
             else:
-                stack[0]=abs(stack[0]%stack[1])
+                self.stack[0]=abs(self.stack[0]%self.stack[1])
             print("0x07 SMOD")
 
         elif op==ADDMOD:
-            if stack[2]==0:
-                stack[0]=0
+            if self.stack[2]==0:
+                self.stack[0]=0
             else:
-                stack[0]=(stack[0]+stack[1])%stack[2]
+                self.stack[0]=(self.stack[0]+self.stack[1])%self.stack[2]
             print("0x08 ADDMOD")
 
         elif op==MULMOD:
-            if stack[2]==0:
-                stack[0]=0
+            if self.stack[2]==0:
+                self.stack[0]=0
             else:
-                stack[0]=(stack[0]*stack[1])%stack[2]
+                self.stack[0]=(self.stack[0]*self.stack[1])%self.stack[2]
             print("0x09 MULMOD")
 
         elif op==EXP:
-            stack[0]=pow(stack[0], stack[1])%maximum
+            self.stack[0]=pow(self.stack[0], self.stack[1])%UINT_256_CEILING
             print("0x0a EXP")
 
         elif op==SIGNEXTEND:
@@ -137,11 +137,11 @@ class Engine():
 
         #Comparison and Bitwise Logic Ops
         elif op==LT:
-            stack[0] = (stack[0]<stack[1]) if 1 else 0
+            self.stack[0] = (self.stack[0]<self.stack[1]) if 1 else 0
             print("0x10 LT")
 
         elif op==GT:
-            stack[0] = (stack[0]>stack[1]) if 1 else 0
+            self.stack[0] = (self.stack[0]>self.stack[1]) if 1 else 0
             print("0x11 GT")
 
         elif op==SLT:
@@ -153,11 +153,11 @@ class Engine():
             print("0x13 SGT")
 
         elif op==EQ:
-            stack[0] = (stack[0]==stack[1]) if 1 else 0
+            self.stack[0] = (self.stack[0]==self.stack[1]) if 1 else 0
             print("0x14 EQ")
 
         elif op==ISZERO:
-            stack[0] = (stack[0]==0) if 1 else 0
+            self.stack[0] = (self.stack[0]==0) if 1 else 0
             print("0x15 ISZERO")
 
         elif op==AND:
@@ -208,14 +208,14 @@ class Engine():
             print("0x36 CALLDATASIZE")
 
         elif op==CALLDATACOPY:
-            #memory op
+            #self.memory op
             print("0x37 CALLDATACOPY")
 
         elif op==CODESIZE:
             print("0x38 CODESIZE")
 
         elif op==CODECOPY:
-            #memory op
+            #self.memory op
             print("0x39 CODECOPY")
 
         elif op==GASPRICE:
@@ -225,7 +225,7 @@ class Engine():
             print("0x3b EXTCODESIZE")
 
         elif op==EXTCODECOPY:
-            #memory op
+            #self.memory op
             print("0x3c EXTCODECOPY")
 
         elif op==RETURNDATASIZE:
@@ -268,7 +268,7 @@ class Engine():
             print("0x53 MSTORE8")
 
         elif op==SLOAD:
-            stack[0]=storage[stack[0]]
+            self.stack[0]=self.storage[self.stack[0]]
             print("0x54 SLOAD")
 
         elif op==SSTORE:
@@ -292,10 +292,10 @@ class Engine():
         elif op==JUMPDEST:
             #that's all
             print("0x5b JUMPDEST")
-
         #Push Ops
         elif op >= PUSH1 and op <= PUSH32:
-            print("PUSH")
+            print(f"{hex(op)} PUSH{op-(PUSH1-1)}")
+            self.stack.insert(0, operand)
         """
         elif op=="60":
             print("0x60 PUSH1")
@@ -393,148 +393,145 @@ class Engine():
         elif op=="7f":
             print("0x7f PUSH32")
         """
-
         #Duplication Ops
-        elif op >= DUP1 and op <= DUP16:
-            print("DUP")
+        if DUP1 <= op <= DUP16:
+            print(f"{hex(op)} DUP{op-(DUP1-1)}")
         """
         #Duplication Ops
         elif op=="80":
-            stack[0]=stack[0]
+            self.stack[0]=self.stack[0]
             print("0x80 DUP1")
 
         elif op=="81":
-            stack[0]=stack[1]
+            self.stack[0]=self.stack[1]
             print("0x81 DUP2")
 
         elif op=="82":
-            stack[0]=stack[2]
+            self.stack[0]=self.stack[2]
             print("0x82 DUP3")
 
         elif op=="83":
-            stack[0]=stack[3]
+            self.stack[0]=self.stack[3]
             print("0x83 DUP4")
 
         elif op=="84":
-            stack[0]=stack[4]
+            self.stack[0]=self.stack[4]
             print("0x84 DUP5")
 
         elif op=="85":
-            stack[0]=stack[5]
+            self.stack[0]=self.stack[5]
             print("0x85 DUP6")
 
         elif op=="86":
-            stack[0]=stack[6]
+            self.stack[0]=self.stack[6]
             print("0x86 DUP7")
 
         elif op=="87":
-            stack[0]=stack[7]
+            self.stack[0]=self.stack[7]
             print("0x87 DUP8")
 
         elif op=="88":
-            stack[0]=stack[8]
+            self.stack[0]=self.stack[8]
             print("0x88 DUP9")
 
         elif op=="89":
-            stack[0]=stack[9]
+            self.stack[0]=self.stack[9]
             print("0x89 DUP10")
 
         elif op=="8a":
-            stack[0]=stack[10]
+            self.stack[0]=self.stack[10]
             print("0x8a DUP11")
 
         elif op=="8b":
-            stack[0]=stack[11]
+            self.stack[0]=self.stack[11]
             print("0x8b DUP12")
 
         elif op=="8c":
-            stack[0]=stack[12]
+            self.stack[0]=self.stack[12]
             print("0x8c DUP13")
 
         elif op=="8d":
-            stack[0]=stack[13]
+            self.stack[0]=self.stack[13]
             print("0x8d DUP14")
 
         elif op=="8e":
-            stack[0]=stack[14]
+            self.stack[0]=self.stack[14]
             print("0x8e DUP15")
 
         elif op=="8f":
-            stack[0]=stack[15]
+            self.stack[0]=self.stack[15]
             print("0x8f DUP16")
         """
-
         #Exchange Ops
-        elif op >= SWAP1 and op <= SWAP16:
+        if SWAP1 <= op <= SWAP16:
             print("SWAP")
         """
         elif op=="90":
             print("0x90 SWAP1")
 
         elif op=="91":
-            stack[0], stack[1]=stack[1], stack[0]
+            self.stack[0], self.stack[1]=self.stack[1], self.stack[0]
             print("0x91 SWAP2")
 
         elif op=="92":
-            stack[0], stack[2]=stack[2], stack[0]
+            self.stack[0], self.stack[2]=self.stack[2], self.stack[0]
             print("0x92 SWAP3")
 
         elif op=="93":
-            stack[0], stack[3]=stack[3], stack[0]
+            self.stack[0], self.stack[3]=self.stack[3], self.stack[0]
             print("0x93 SWAP4")
 
         elif op=="94":
-            stack[0], stack[4]=stack[4], stack[0]
+            self.stack[0], self.stack[4]=self.stack[4], self.stack[0]
             print("0x94 SWAP5")
 
         elif op=="95":
-            stack[0], stack[5]=stack[5], stack[0]
+            self.stack[0], self.stack[5]=self.stack[5], self.stack[0]
             print("0x95 SWAP6")
 
         elif op=="96":
-            stack[0], stack[6]=stack[6], stack[0]
+            self.stack[0], self.stack[6]=self.stack[6], self.stack[0]
             print("0x96 SWAP7")
 
         elif op=="97":
-            stack[0], stack[7]=stack[7], stack[0]
+            self.stack[0], self.stack[7]=self.stack[7], self.stack[0]
             print("0x97 SWAP8")
 
         elif op=="98":
-            stack[0], stack[8]=stack[8], stack[0]
+            self.stack[0], self.stack[8]=self.stack[8], self.stack[0]
             print("0x98 SWAP9")
 
         elif op=="99":
-            stack[0], stack[9]=stack[9], stack[0]
+            self.stack[0], self.stack[9]=self.stack[9], self.stack[0]
             print("0x99 SWAP10")
 
         elif op=="9a":
-            stack[0], stack[10]=stack[10], stack[0]
+            self.stack[0], self.stack[10]=self.stack[10], self.stack[0]
             print("0x9a SWAP11")
 
         elif op=="9b":
-            stack[0], stack[11]=stack[11], stack[0]
+            self.stack[0], self.stack[11]=self.stack[11], self.stack[0]
             print("0x9b SWAP12")
 
         elif op=="9c":
-            stack[0], stack[12]=stack[12], stack[0]
+            self.stack[0], self.stack[12]=self.stack[12], self.stack[0]
             print("0x9c SWAP13")
 
         elif op=="9d":
-            stack[0], stack[13]=stack[13], stack[0]
+            self.stack[0], self.stack[13]=self.stack[13], self.stack[0]
             print("0x9d SWAP14")
 
         elif op=="9e":
-            stack[0], stack[14]=stack[14], stack[0]
+            self.stack[0], self.stack[14]=self.stack[14], self.stack[0]
             print("0x9e SWAP15")
 
         elif op=="9f":
-            stack[0], stack[15]=stack[15], stack[0]
+            self.stack[0], self.stack[15]=self.stack[15], self.stack[0]
             print("0x9f SWAP16")
         """
-
         #Logging Ops
         #no need to do
-        elif op==LOG0:
+        if op==LOG0:
             print("0xa0 LOG0")
 
         elif op==LOG1:
