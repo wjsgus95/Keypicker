@@ -1,9 +1,9 @@
 
 # Default output file path.
-DEFAULT_OUT_PATH = 'result.stats'
+DEFAULT_OUT_PATH = 'examples/out.json'
 
 # No operand constant.
-NO_OPERAND = -1
+NO_OPERAND = None
 
 ANY = 'any'
 UINT256 = 'uint256'

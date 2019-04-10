@@ -19,7 +19,7 @@ parser.add_argument('--dest', type=str, help=f'Output stats file path, defaults 
 args = parser.parse_args()
 
 # Will override output file path if any given.
-[outfile_path] = args.dest
+outfile_path = args.dest if type(args.dest) == str else args.dest[0]
 
 
 class Keypicker():

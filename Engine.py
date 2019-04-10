@@ -13,7 +13,7 @@ class Engine():
         self.storage_data=json_data["storage"]
 
         self.stack = list()
-        self.memory = 0x00
+        self.memory = dict()
         self.storage = dict()
 
         #self.op_dict = dict()
@@ -81,7 +81,10 @@ class Engine():
             print("}\n")
 
         elif op==ADD:
-            self.stack[0]=(self.stack[0]+self.stack[1])%UINT_256_CEILING
+            value1 = self.stack.pop()
+            value2 = self.stack.pop()
+            self.stack.append((value1+value2)%UINT_256_CEILING)
+
             print("0x01 ADD")
 
         elif op==MUL:
@@ -265,22 +268,35 @@ class Engine():
 
         #Stack, Memory, Storage and Flow Ops
         elif op==POP:
+            self.stack.pop()
             print("0x50 POP")
 
         elif op==MLOAD:
+            address = self.stack.pop()
+            self.stack.append(self.memory[address])
             print("0x51 MLOAD")
 
         elif op==MSTORE:
+            address = self.stack.pop()
+            value   = self.stack.pop()
+            self.memory[address] = value
             print("0x52 MSTORE")
 
         elif op==MSTORE8:
+            address = self.stack.pop()
+            value   = self.stack.pop()
+            self.memory[address] = value % 256
             print("0x53 MSTORE8")
 
         elif op==SLOAD:
-            self.stack[0]=self.storage[self.stack[0]]
+            address = self.stack.pop()
+            self.stack.append(self.storage[address])
             print("0x54 SLOAD")
 
         elif op==SSTORE:
+            address = self.stack.pop()
+            value   = self.stack.pop()
+            self.storage[address] = value
             print("0x55 SSTORE")
 
         elif op==JUMP:
@@ -402,7 +418,7 @@ class Engine():
         elif op=="7f":
             print("0x7f PUSH32")
         """
-        #Duplication Ops
+        # Duplication Ops
         if DUP1 <= op <= DUP16:
             print(f"{hex(op)} DUP{op-(DUP1-1)}")
         """
