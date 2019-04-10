@@ -48,7 +48,39 @@ while i<l:
         print("}\n")
         break
 
-    
+    elif op=="01":
+        stack[0]=(stack[0]+stack[1])%maximum
+        print("0x01 ADD")
+
+    elif op=="02":
+        stack[0]=(stack[0]*stack[1])%maximum
+        print("0x02 MUL")
+
+    elif op=="03":
+        stack[0]=(stack[0]-stack[1])%maximum
+        print("0x03 SUB")
+
+    elif op=="04":
+        if stack[1]==0:
+            stack[0]=0
+        else:
+            stack[0]=(math.floor(stack[0]/stack[1]))%maximum
+        print("0x04 DIV")
+
+    elif op=="05":
+        if stack[1]==0:
+            stack[0]=0
+        elif stack[0]==-maximum/2 and stack[1]==-1:
+            stack[0]=-maximum/2
+        else:
+            stack[0]=abs((math.floor(stack[0]/stack[1])))%maximum
+        print("0x05 SDIV")
+
+    elif op=="06":
+        if stack[1]==0:
+            stack[0]=0
+        else:
+            stack[0]=stack[0]%stack[1]
         print("0x06 MOD")
 
     elif op=="07":
