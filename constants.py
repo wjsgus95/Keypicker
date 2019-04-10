@@ -2,6 +2,9 @@
 # Default output file path.
 DEFAULT_OUT_PATH = 'result.stats'
 
+# No operand constant.
+NO_OPERAND = -1
+
 ANY = 'any'
 UINT256 = 'uint256'
 BYTES = 'bytes'
