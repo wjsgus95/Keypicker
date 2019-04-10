@@ -1,6 +1,8 @@
 from opcode_values import *
 from constants import *
 
+import Stats
+
 import math
 
 class Engine():
@@ -14,54 +16,61 @@ class Engine():
         self.memory = 0x00
         self.storage = dict()
 
-        self.op_dict = dict()
+        #self.op_dict = dict()
+
+        self.stats = Stats.Stats(self)
+
 
     # Configure operation dictionary.
     def configure_op_dict(self) -> None:
 
-        ## Clear operation queue.
-        #self.op_dict[STOP] = lambda operand: self.op_queue.clear()
+        """
+        # Clear operation queue.
+        self.op_dict[STOP] = lambda operand: self.op_queue.clear()
 
-        ## Confiure arithmetic operations.
-        #self.op_dict[ADD] = lambda operand: stack[0]=(stack[0]+stack[1])%UINT_256_CEILING
-        #self.op_dict[MUL] = lambda operand: stack[0]=(stack[0]*stack[1])%UINT_256_CEILING
-        #self.op_dict[SUB] = lambda operand: stack[0]=(stack[0]-stack[1])%UINT_256_CEILING
-        #self.op_dict[DIV] = lambda operand: stack[0] = 0 if stack[1] == 0 else stack[0]=(math.floor(stack[0]/stack[1]))%UINT_256_CEILING)
-        #self.op_dict[SDIV] = lambda operand: 
-        #self.op_dict[MOD] = lambda operand: 
-        #self.op_dict[SMOD] = lambda operand: 
-        #self.op_dict[ADDMOD] = lambda operand: 
-        #self.op_dict[MULMOD] = lambda operand: 
-        #self.op_dict[EXP] = lambda operand: 
-        #self.op_dict[SIGEXTEND] = lambda operand: 
+        # Confiure arithmetic operations.
+        self.op_dict[ADD] = lambda operand: stack[0]=(stack[0]+stack[1])%UINT_256_CEILING
+        self.op_dict[MUL] = lambda operand: stack[0]=(stack[0]*stack[1])%UINT_256_CEILING
+        self.op_dict[SUB] = lambda operand: stack[0]=(stack[0]-stack[1])%UINT_256_CEILING
+        self.op_dict[DIV] = lambda operand: stack[0] = 0 if stack[1] == 0 else stack[0]=(math.floor(stack[0]/stack[1]))%UINT_256_CEILING)
+        self.op_dict[SDIV] = lambda operand: 
+        self.op_dict[MOD] = lambda operand: 
+        self.op_dict[SMOD] = lambda operand: 
+        self.op_dict[ADDMOD] = lambda operand: 
+        self.op_dict[MULMOD] = lambda operand: 
+        self.op_dict[EXP] = lambda operand: 
+        self.op_dict[SIGEXTEND] = lambda operand: 
 
-        ## Configure logic operations.
-        #self.op_dict[LT] = lambda operand: 
-        #self.op_dict[GT] = lambda operand: 
-        #self.op_dict[SLT] = lambda operand: 
-        #self.op_dict[SGT] = lambda operand: 
-        #self.op_dict[EQ] = lambda operand: 
-        #self.op_dict[ISZERO] = lambda operand: 
-        #self.op_dict[AND] = lambda operand: 
-        #self.op_dict[OR] = lambda operand: 
-        #self.op_dict[XOR] = lambda operand: 
-        #self.op_dict[NOT] = lambda operand: 
-        #self.op_dict[BYTE] = lambda operand: 
-        #self.op_dict[SHL] = lambda operand: 
-        #self.op_dict[SHR] = lambda operand: 
-        #self.op_dict[SAR] = lambda operand: 
+        # Configure logic operations.
+        self.op_dict[LT] = lambda operand: 
+        self.op_dict[GT] = lambda operand: 
+        self.op_dict[SLT] = lambda operand: 
+        self.op_dict[SGT] = lambda operand: 
+        self.op_dict[EQ] = lambda operand: 
+        self.op_dict[ISZERO] = lambda operand: 
+        self.op_dict[AND] = lambda operand: 
+        self.op_dict[OR] = lambda operand: 
+        self.op_dict[XOR] = lambda operand: 
+        self.op_dict[NOT] = lambda operand: 
+        self.op_dict[BYTE] = lambda operand: 
+        self.op_dict[SHL] = lambda operand: 
+        self.op_dict[SHR] = lambda operand: 
+        self.op_dict[SAR] = lambda operand: 
 
-        ## Configure PUSH operations.
-        #for PUSH in range(PUSH1, PUSH32+1):
-        #    self.op_dict[PUSH] = lambda operand: self.stack.insert(0, operand)
+        # Configure PUSH operations.
+        for PUSH in range(PUSH1, PUSH32+1):
+            self.op_dict[PUSH] = lambda operand: self.stack.insert(0, operand)
+        """
         pass
 
+    # Run the whole bytecode.
     def run_ops(self, op_queue) -> None:
         self.op_queue = op_queue
         while len(self.op_queue):
             op, operand = op_queue.pop(0)
             self.run_single_op(op, operand)
 
+    # Run single operation.
     def run_single_op(self, op, operand) -> None:
         #self.op_dict[op](operand)
         if op==STOP:

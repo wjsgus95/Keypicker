@@ -1,6 +1,6 @@
 from constants import *
-from Engine import Engine
-from Parser import Parser
+import Engine
+import Parser
 
 import json
 import math
@@ -19,7 +19,7 @@ parser.add_argument('--dest', type=str, help=f'Output stats file path, defaults 
 args = parser.parse_args()
 
 # Will override output file path if any given.
-outfile_path = args.dest
+[outfile_path] = args.dest
 
 
 class Keypicker():
@@ -28,8 +28,8 @@ class Keypicker():
         with open(json_path) as json_file:
             self.json_data = json.load(json_file)
 
-        self.parser = Parser(self.json_data["bytecode"])
-        self.engine = Engine(self.json_data)
+        self.parser = Parser.Parser(self.json_data["bytecode"])
+        self.engine = Engine.Engine(self.json_data)
 
     def run(self) -> None:
         op_queue = self.parser.parse_ops()

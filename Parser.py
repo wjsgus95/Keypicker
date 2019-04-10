@@ -8,6 +8,7 @@ class Parser():
         self._bytecode = bytecode
         pass
 
+    # Parse the whole bytecode.
     def parse_ops(self) -> list((int,int)):
         ops = list()
         while(len(self.bytecode)):
