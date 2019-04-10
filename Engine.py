@@ -88,41 +88,58 @@ class Engine():
             print("0x01 ADD")
 
         elif op==MUL:
-            self.stack[0]=(self.stack[0]*self.stack[1])%UINT_256_CEILING
+            value1 = self.stack.pop()
+            value2 = self.stack.pop()
+            self.stack.append((value1*value2)%UINT_256_CEILING)
             print("0x02 MUL")
 
         elif op==SUB:
-            self.stack[0]=(self.stack[0]-self.stack[1])%UINT_256_CEILING
+            value1 = self.stack.pop()
+            value2 = self.stack.pop()
+            self.stack.append((value1-value2)%UINT_256_CEILING)
             print("0x03 SUB")
 
         elif op==DIV:
-            if self.stack[1]==0:
-                self.stack[0]=0
+            value1 = self.stack.pop()
+            value2 = self.stack.pop()
+            if value2 == 0:
+                self.stack.append(0)
             else:
-                self.stack[0]=(math.floor(self.stack[0]/self.stack[1]))%UINT_256_CEILING
+                self.stack.append(math.floor((value1/value2))%UINT_256_CEILING)
+                #self.stack[0]=(math.floor(self.stack[0]/self.stack[1]))%UINT_256_CEILING
             print("0x04 DIV")
 
         elif op==SDIV:
-            if self.stack[1]==0:
-                self.stack[0]=0
-            elif self.stack[0]==-UINT_256_CEILING/2 and self.stack[1]==-1:
-                self.stack[0]=-UINT_256_CEILING/2
+            value1 = self.stack.pop()
+            value2 = self.stack.pop()
+            if value2 == 0:
+                value1 = 0
+            elif value1 == -UINT_256_CEILING/2 and value2 == -1:
+                value1 = -UINT_256_CEILING/2
             else:
-                self.stack[0]=abs((math.floor(self.stack[0]/self.stack[1])))%UINT_256_CEILING
+                value1 = abs((math.floor(value1/value2)))%UINT_256_CEILING
+            self.stack.append(value1)
             print("0x05 SDIV")
 
         elif op==MOD:
-            if self.stack[1]==0:
-                self.stack[0]=0
+            value1 = self.stack.pop()
+            value2 = self.stack.pop()
+            if value2 == 0:
+                value1 = 0
             else:
-                self.stack[0]=self.stack[0]%self.stack[1]
+                value1 = value1 % value2
+            self.stack.append(value1)
             print("0x06 MOD")
 
         elif op==SMOD:
-            if self.stack[1]==0:
-                self.stack[0]=0
+            value1 = self.stack.pop()
+            value2 = self.stack.pop()
+            if value2 == 0:
+                value1 = 0
             else:
-                self.stack[0]=abs(self.stack[0]%self.stack[1])
+                value1 = abs(value1 % value2)
+                #self.stack[0]=abs(self.stack[0]%self.stack[1])
+            self.stack.append(value1)
             print("0x07 SMOD")
 
         elif op==ADDMOD:
@@ -320,7 +337,7 @@ class Engine():
         #Push Ops
         elif op >= PUSH1 and op <= PUSH32:
             print(f"{hex(op)} PUSH{op-(PUSH1-1)}")
-            self.stack.insert(0, operand)
+            self.stack.append(operand)
         """
         elif op=="60":
             print("0x60 PUSH1")
