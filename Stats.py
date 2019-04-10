@@ -5,6 +5,7 @@ from Keypicker import (
 import Engine
 import json
 
+# Maybe we can produce additional stats later?
 class Stats():
     # Produce stats directly from Engine instance.
     def __init__(self, engine) -> None:
@@ -13,5 +14,13 @@ class Stats():
 
     def print_stats(self) -> None:
         # TEST
-        print(self.engine.stack)
+        data = dict()
+
+        data['bytecode'] = ''
+        data['stack'] = self.engine.stack
+        data['memory'] = self.engine.memory
+        data['storage'] = self.engine.storage
+
+        with open(self.outfile_path, 'w') as out_json:
+            json.dump(data, out_json)
 

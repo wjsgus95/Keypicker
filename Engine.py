@@ -20,7 +20,6 @@ class Engine():
 
         self.stats = Stats.Stats(self)
 
-
     # Configure operation dictionary.
     def configure_op_dict(self) -> None:
 
@@ -69,6 +68,7 @@ class Engine():
         while len(self.op_queue):
             op, operand = op_queue.pop(0)
             self.run_single_op(op, operand)
+        self.stats.print_stats()
 
     # Run single operation.
     def run_single_op(self, op, operand) -> None:
