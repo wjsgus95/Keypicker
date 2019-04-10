@@ -15,6 +15,7 @@ class Engine():
         self.stack = list()
         self.memory = dict()
         self.storage = dict()
+        self.pc = 0
 
         #self.op_dict = dict()
 
@@ -150,14 +151,21 @@ class Engine():
             print("0x08 ADDMOD")
 
         elif op==MULMOD:
-            if self.stack[2]==0:
-                self.stack[0]=0
+            value1 = self.stack.pop()
+            value2 = self.stack.pop()
+            value3 = self.stack.pop()
+            if value3 == 0:
+                value1 = 0
             else:
-                self.stack[0]=(self.stack[0]*self.stack[1])%self.stack[2]
+                value1=(value1*value2)%value3
+            self.stack.append(value1)
             print("0x09 MULMOD")
 
         elif op==EXP:
-            self.stack[0]=pow(self.stack[0], self.stack[1])%UINT_256_CEILING
+            base     = self.stack.pop()
+            exponent = self.stack.pop()
+            self.stack.append(pow(base, exponent)%UINT_256_CEILING)
+            #self.stack[0]=pow(self.stack[0], self.stack[1])%UINT_256_CEILING
             print("0x0a EXP")
 
         elif op==SIGNEXTEND:
@@ -323,6 +331,7 @@ class Engine():
             print("0x57 JUMPI")
 
         elif op==PC:
+            self.stack.append(self.pc)
             print("0x58 PC")
 
         elif op==MSIZE:
@@ -336,244 +345,23 @@ class Engine():
             print("0x5b JUMPDEST")
         #Push Ops
         elif op >= PUSH1 and op <= PUSH32:
-            print(f"{hex(op)} PUSH{op-(PUSH1-1)}")
             self.stack.append(operand)
-        """
-        elif op=="60":
-            print("0x60 PUSH1")
+            print(f"{hex(op)} PUSH{op-(PUSH1-1)}")
 
-        elif op=="61":
-            print("0x61 PUSH2")
-
-        elif op=="62":
-            print("0x62 PUSH3")
-
-        elif op=="63":
-            print("0x63 PUSH4")
-
-        elif op=="64":
-            print("0x64 PUSH5")
-
-        elif op=="65":
-            print("0x65 PUSH6")
-
-        elif op=="66":
-            print("0x66 PUSH7")
-
-        elif op=="67":
-            print("0x67 PUSH8")
-
-        elif op=="68":
-            print("0x68 PUSH9")
-
-        elif op=="69":
-            print("0x69 PUSH10")
-
-        elif op=="6a":
-            print("0x6a PUSH11")
-
-        elif op=="6b":
-            print("0x6b PUSH12")
-
-        elif op=="6c":
-            print("0x6c PUSH13")
-
-        elif op=="6d":
-            print("0x6d PUSH14")
-
-        elif op=="6e":
-            print("0x6e PUSH15")
-
-        elif op=="6f":
-            print("0x6f PUSH16")
-
-        elif op=="70":
-            print("0x70 PUSH17")
-
-        elif op=="71":
-            print("0x71 PUSH18")
-
-        elif op=="72":
-            print("0x72 PUSH19")
-
-        elif op=="73":
-            print("0x73 PUSH20")
-
-        elif op=="74":
-            print("0x74 PUSH21")
-
-        elif op=="75":
-            print("0x75 PUSH22")
-
-        elif op=="76":
-            print("0x76 PUSH23")
-
-        elif op=="77":
-            print("0x77 PUSH24")
-
-        elif op=="78":
-            print("0x78 PUSH25")
-
-        elif op=="79":
-            print("0x79 PUSH26")
-
-        elif op=="7a":
-            print("0x7a PUSH27")
-
-        elif op=="7b":
-            print("0x7b PUSH28")
-
-        elif op=="7c":
-            print("0x7c PUSH29")
-
-        elif op=="7d":
-            print("0x7d PUSH30")
-
-        elif op=="7e":
-            print("0x7e PUSH31")
-
-        elif op=="7f":
-            print("0x7f PUSH32")
-        """
         # Duplication Ops
-        if DUP1 <= op <= DUP16:
+        elif DUP1 <= op <= DUP16:
+            target = -(op - (DUP1 - 1))
+            self.stack.append(self.stack[target])
             print(f"{hex(op)} DUP{op-(DUP1-1)}")
-        """
-        #Duplication Ops
-        elif op=="80":
-            self.stack[0]=self.stack[0]
-            print("0x80 DUP1")
 
-        elif op=="81":
-            self.stack[0]=self.stack[1]
-            print("0x81 DUP2")
-
-        elif op=="82":
-            self.stack[0]=self.stack[2]
-            print("0x82 DUP3")
-
-        elif op=="83":
-            self.stack[0]=self.stack[3]
-            print("0x83 DUP4")
-
-        elif op=="84":
-            self.stack[0]=self.stack[4]
-            print("0x84 DUP5")
-
-        elif op=="85":
-            self.stack[0]=self.stack[5]
-            print("0x85 DUP6")
-
-        elif op=="86":
-            self.stack[0]=self.stack[6]
-            print("0x86 DUP7")
-
-        elif op=="87":
-            self.stack[0]=self.stack[7]
-            print("0x87 DUP8")
-
-        elif op=="88":
-            self.stack[0]=self.stack[8]
-            print("0x88 DUP9")
-
-        elif op=="89":
-            self.stack[0]=self.stack[9]
-            print("0x89 DUP10")
-
-        elif op=="8a":
-            self.stack[0]=self.stack[10]
-            print("0x8a DUP11")
-
-        elif op=="8b":
-            self.stack[0]=self.stack[11]
-            print("0x8b DUP12")
-
-        elif op=="8c":
-            self.stack[0]=self.stack[12]
-            print("0x8c DUP13")
-
-        elif op=="8d":
-            self.stack[0]=self.stack[13]
-            print("0x8d DUP14")
-
-        elif op=="8e":
-            self.stack[0]=self.stack[14]
-            print("0x8e DUP15")
-
-        elif op=="8f":
-            self.stack[0]=self.stack[15]
-            print("0x8f DUP16")
-        """
         #Exchange Ops
-        if SWAP1 <= op <= SWAP16:
-            print("SWAP")
-        """
-        elif op=="90":
-            print("0x90 SWAP1")
-
-        elif op=="91":
-            self.stack[0], self.stack[1]=self.stack[1], self.stack[0]
-            print("0x91 SWAP2")
-
-        elif op=="92":
-            self.stack[0], self.stack[2]=self.stack[2], self.stack[0]
-            print("0x92 SWAP3")
-
-        elif op=="93":
-            self.stack[0], self.stack[3]=self.stack[3], self.stack[0]
-            print("0x93 SWAP4")
-
-        elif op=="94":
-            self.stack[0], self.stack[4]=self.stack[4], self.stack[0]
-            print("0x94 SWAP5")
-
-        elif op=="95":
-            self.stack[0], self.stack[5]=self.stack[5], self.stack[0]
-            print("0x95 SWAP6")
-
-        elif op=="96":
-            self.stack[0], self.stack[6]=self.stack[6], self.stack[0]
-            print("0x96 SWAP7")
-
-        elif op=="97":
-            self.stack[0], self.stack[7]=self.stack[7], self.stack[0]
-            print("0x97 SWAP8")
-
-        elif op=="98":
-            self.stack[0], self.stack[8]=self.stack[8], self.stack[0]
-            print("0x98 SWAP9")
-
-        elif op=="99":
-            self.stack[0], self.stack[9]=self.stack[9], self.stack[0]
-            print("0x99 SWAP10")
-
-        elif op=="9a":
-            self.stack[0], self.stack[10]=self.stack[10], self.stack[0]
-            print("0x9a SWAP11")
-
-        elif op=="9b":
-            self.stack[0], self.stack[11]=self.stack[11], self.stack[0]
-            print("0x9b SWAP12")
-
-        elif op=="9c":
-            self.stack[0], self.stack[12]=self.stack[12], self.stack[0]
-            print("0x9c SWAP13")
-
-        elif op=="9d":
-            self.stack[0], self.stack[13]=self.stack[13], self.stack[0]
-            print("0x9d SWAP14")
-
-        elif op=="9e":
-            self.stack[0], self.stack[14]=self.stack[14], self.stack[0]
-            print("0x9e SWAP15")
-
-        elif op=="9f":
-            self.stack[0], self.stack[15]=self.stack[15], self.stack[0]
-            print("0x9f SWAP16")
-        """
+        elif SWAP1 <= op <= SWAP16:
+            target = -(op - (SWAP1 - 1)) - 1
+            self.stack[-1], self.stack[target] = self.stack[target], self.stack[-1]
+            print(f"{hex(op)} SWAP{op-(SWAP1-1)}")
         #Logging Ops
         #no need to do
-        if op==LOG0:
+        elif op==LOG0:
             print("0xa0 LOG0")
 
         elif op==LOG1:
@@ -610,12 +398,18 @@ class Engine():
         elif op==REVERT:
             print("0xfd REVERT")
 
-        elif op==0xfe:
-            #nothing
-            print("0xfe INVALID")
-
         elif op==SELFDESTRUCT:
             print("0xff SELFDESTRUCT")
+
+        else:
+            print(f"INVALID OP CODE {hex(op)}")
+            exit(1)
+
+        # Advance program counter.
+        pc_increment = 1
+        if PUSH1 <= op <= PUSH32 : 
+            pc_increment += op - (PUSH1 - 1)
+        self.pc += pc_increment
 
 
     
