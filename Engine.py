@@ -16,6 +16,8 @@ class Engine():
         self.stack = list()
         self.memory = dict()
         self.storage = dict()
+
+        #self.op_address = dict()
         self.pc = 0
 
         #self.op_dict = dict()
@@ -67,9 +69,16 @@ class Engine():
     # Run the whole bytecode.
     def run_ops(self, op_queue) -> None:
         self.op_queue = op_queue
-        while len(self.op_queue):
-            op, operand = op_queue.pop(0)
-            self.run_single_op(op, operand)
+
+        for i in range(len(self.op_queue)):
+            op, operand = self.op_queue[i]
+
+            # Remember which operation is at which address.
+            #self.op_address[self.pc] = i
+
+            self.run_singe_op(op, operand)
+
+        # Print stats after exeuction.
         self.stats.print_stats()
 
     # Run single operation.
