@@ -11,6 +11,7 @@ class Engine():
         self.stack_data=json_data["stack"]
         self.memory_data=json_data["memory"]
         self.storage_data=json_data["storage"]
+        self.bytecode = json_data["bytecode"]
 
         self.stack = list()
         self.memory = dict()
@@ -224,48 +225,85 @@ class Engine():
         #Environmental Information
         #need more information for all those opcodes....
         elif op==ADDRESS:
+            # tentative
+            self.stack.append(0)
             print("0x30 ADDRESS")
 
         elif op==BALANCE:
+            # tentative
+            self.stack.pop()
+            self.stack.append(0)
             print("0x31 BALANCE")
 
         elif op==ORIGIN:
+            # tentative
+            self.stack.append(0)
             print("0x32 ORIGIN")
 
         elif op==CALLER:
+            # tentative
+            self.stack.append(0)
             print("0x33 CALLER")
 
         elif op==CALLVALUE:
+            # tentative
+            self.stack.append(0)
             print("0x34 CALLVALUE")
 
         elif op==CALLDATALOAD:
+            # tentative
+            self.stack.pop()
+            self.stack.append(0)
             print("0x35 CALLDATALOAD")
 
         elif op==CALLDATASIZE:
+            # tentative
+            self.stack.append(0)
             print("0x36 CALLDATASIZE")
 
         elif op==CALLDATACOPY:
-            #self.memory op
+            # tentative
+            self.stack.pop()
+            self.stack.pop()
+            self.stack.pop()
+            # TODO: Put something in memory
             print("0x37 CALLDATACOPY")
 
         elif op==CODESIZE:
+            self.stack.append(len(self.bytecode)//2)
             print("0x38 CODESIZE")
 
         elif op==CODECOPY:
-            #self.memory op
+            # tentative
+            self.stack.pop()
+            self.stack.pop()
+            self.stack.pop()
+            # TODO: Put something in memory
             print("0x39 CODECOPY")
 
         elif op==GASPRICE:
+            # tentative
+            self.stack.append(0)
             print("0x3a GASPRICE")
 
         elif op==EXTCODESIZE:
+            # tentative
+            self.stack.pop()
+            self.stack.append(0)
             print("0x3b EXTCODESIZE")
 
         elif op==EXTCODECOPY:
-            #self.memory op
+            # tentative
+            self.stack.pop()
+            self.stack.pop()
+            self.stack.pop()
+            self.stack.pop()
+            # TODO: Put something in memory
             print("0x3c EXTCODECOPY")
 
         elif op==RETURNDATASIZE:
+            # tentative
+            self.stack.append(0)
             print("0x3d RETURNDATASIZE")
 
         elif op==RETURNDATACOPY:
