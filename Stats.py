@@ -22,5 +22,5 @@ class Stats():
         data['storage'] = self.engine.storage
 
         with open(self.outfile_path, 'w') as out_json:
-            json.dump(data, out_json)
+            json.dump(data, out_json, indent=4)
 

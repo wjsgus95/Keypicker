@@ -71,12 +71,12 @@ class Engine():
         self.op_queue = op_queue
 
         for i in range(len(self.op_queue)):
-            op, operand = self.op_queue[i]
+            op, operand, pc = self.op_queue[i]
 
             # Remember which operation is at which address.
             #self.op_address[self.pc] = i
 
-            self.run_singe_op(op, operand)
+            self.run_single_op(op, operand)
 
         # Print stats after exeuction.
         self.stats.print_stats()
@@ -204,7 +204,9 @@ class Engine():
             print("0x14 EQ")
 
         elif op==ISZERO:
-            self.stack[0] = (self.stack[0]==0) if 1 else 0
+            #self.stack[0] = (self.stack[0]==0) if 1 else 0
+            value = self.stack.pop()
+            self.stack.append(1 if value == 0 else 0)
             print("0x15 ISZERO")
 
         elif op==AND:
@@ -372,6 +374,10 @@ class Engine():
             print("0x55 SSTORE")
 
         elif op==JUMP:
+            pc = self.stack.pop()
+            destination = next(((m_op, m_operand, m_pc) for (m_op, m_operand, m_pc) in self.op_queue \
+                                if self.op_queue[2] == destination), None)
+            #TODO: change current PC.
             print("0x56 JUMP")
 
         elif op==JUMPI:
@@ -457,6 +463,11 @@ class Engine():
         if PUSH1 <= op <= PUSH32 : 
             pc_increment += op - (PUSH1 - 1)
         self.pc += pc_increment
+
+        #DEBUG
+        print("stack:", self.stack)
+        print("memory:", self.memory)
+        print("storage:", self.storage, end='\n\n')
 
 
     
